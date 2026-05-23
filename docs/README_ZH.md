@@ -4,6 +4,13 @@
 
 ### 抗量子混合加密库
 
+<!-- 语言切换 / Language Switcher -->
+<p>
+  <a href="../README.md"><img src="https://img.shields.io/badge/English-✓-blue.svg?style=for-the-badge" alt="English"/></a>
+  <a href="README_FA.md"><img src="https://img.shields.io/badge/فارسی-✓-green.svg?style=for-the-badge" alt="فارسی"/></a>
+  <a href="README_ZH.md"><img src="https://img.shields.io/badge/中文-✓-red.svg?style=for-the-badge" alt="中文"/></a>
+</p>
+
 [![Python 版本](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://python.org)
 [![许可证](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![安全等级](https://img.shields.io/badge/security-NIST%20Level%203-red.svg)](docs/ARCHITECTURE_ZH.md)

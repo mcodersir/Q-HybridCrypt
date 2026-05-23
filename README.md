@@ -1,15 +1,23 @@
 <div align="center">
 
-# 🔐 Q-HybridCrypt v2.0 "PHOENIX"
+# Q-HybridCrypt v2.0 "PHOENIX"
 
 ### Advanced Quantum-Resistant Hybrid Cryptographic Library
+
+<!-- Language Switcher -->
+<p>
+  <a href="README.md"><img src="https://img.shields.io/badge/English-✓-blue.svg?style=for-the-badge" alt="English"/></a>
+  <a href="docs/README_FA.md"><img src="https://img.shields.io/badge/فارسی-✓-green.svg?style=for-the-badge" alt="فارسی"/></a>
+  <a href="docs/README_ZH.md"><img src="https://img.shields.io/badge/中文-✓-red.svg?style=for-the-badge" alt="中文"/></a>
+</p>
 
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://python.org)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Security Level](https://img.shields.io/badge/security-NIST%20Level%203-red.svg)](docs/ARCHITECTURE.md)
-[![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](https://github.com/mcodersir/Q-HybridCrypt)
+[![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](https://github.com/mcodersir/Q-HybridCrypt/releases)
 [![Quantum Resistant](https://img.shields.io/badge/quantum-resistant-8A2BE2.svg)](docs/SECURITY.md)
 [![Migration SDK](https://img.shields.io/badge/migration-SDK-orange.svg)](docs/MIGRATION_GUIDE.md)
+[![PyPI](https://img.shields.io/badge/PyPI-q--hybridcrypt-1DAFB3.svg)](https://pypi.org/project/q-hybridcrypt/)
 
 **Triple-Cascade Encryption · Module-LWE KEM · Argon2id · CCA2 Secure · Migration SDK**
 
@@ -107,7 +115,7 @@ If SHA3 is compromised, the BLAKE2b path still protects the AES layer. If both K
 ### Installation
 
 ```bash
-# Install from PyPI (when published)
+# Install from PyPI
 pip install q-hybridcrypt
 
 # Install from source
@@ -120,6 +128,12 @@ pip install q-hybridcrypt[performance]  # cryptography + argon2-cffi
 
 # Development dependencies
 pip install q-hybridcrypt[dev]  # pytest + black
+
+# Migration helpers
+pip install q-hybridcrypt[migration]  # cryptography library
+
+# Everything
+pip install q-hybridcrypt[all]
 ```
 
 ### 30-Second Example
@@ -141,7 +155,7 @@ ciphertext = crypto.encrypt(message, public_key)
 plaintext = crypto.decrypt(ciphertext, private_key)
 assert plaintext == message
 
-print("✓ Quantum-resistant encryption successful!")
+print("Quantum-resistant encryption successful!")
 ```
 
 ### With Associated Data (AAD)
@@ -160,7 +174,7 @@ plaintext = crypto.decrypt(ciphertext, private_key, associated_data=aad)
 try:
     crypto.decrypt(ciphertext, private_key, associated_data=b"wrong")
 except ValueError:
-    print("✓ Wrong AAD correctly rejected")
+    print("Wrong AAD correctly rejected")
 ```
 
 ### Password Hashing
@@ -217,7 +231,7 @@ The PHOENIX triple-cascade encrypts data through three sequential layers, each w
 
 ### Layer 1: ChaCha20-Poly1305 AEAD
 
-ChaCha20 is a stream cipher designed by Daniel Bernstein that operates through 20 rounds of quarter-round operations on a 4×4 matrix of 32-bit words. Unlike AES, ChaCha20 performs no table lookups, making it immune to cache-timing attacks that can leak information through variable memory access patterns. The Poly1305 one-time MAC provides information-theoretic authentication when used with a unique key per message, which is guaranteed by the per-message KEM encapsulation. Together, ChaCha20-Poly1305 provides 256-bit confidentiality and 128-bit authentication, both of which offer 128-bit security against quantum adversaries via Grover's algorithm.
+ChaCha20 is a stream cipher designed by Daniel Bernstein that operates through 20 rounds of quarter-round operations on a 4x4 matrix of 32-bit words. Unlike AES, ChaCha20 performs no table lookups, making it immune to cache-timing attacks that can leak information through variable memory access patterns. The Poly1305 one-time MAC provides information-theoretic authentication when used with a unique key per message, which is guaranteed by the per-message KEM encapsulation. Together, ChaCha20-Poly1305 provides 256-bit confidentiality and 128-bit authentication, both of which offer 128-bit security against quantum adversaries via Grover's algorithm.
 
 - **Algorithm**: ChaCha20 stream cipher (20 rounds) + Poly1305 one-time MAC
 - **Key**: 256-bit, derived via HKDF-SHA3-256 (Path 1)
@@ -248,23 +262,23 @@ The third layer uses SHA3-256 as a hash-based stream cipher: `keystream[i] = SHA
 
 ## Feature Highlights
 
-### 🔬 Real Module-LWE Key Encapsulation
+### Real Module-LWE Key Encapsulation
 
 The KEM performs genuine polynomial arithmetic over the ring Z_3329[X]/(X^256+1), including schoolbook polynomial multiplication with negacyclic reduction and centered binomial distribution noise sampling. This is not a simulation — it implements the same mathematical framework as ML-KEM (Kyber-768), the NIST post-quantum cryptography standard. The Fujisaki-Okamoto transform provides proven CCA2 security with implicit rejection, ensuring that invalid ciphertexts produce pseudorandom shared secrets rather than error signals.
 
-### 🛡️ Triple Authentication
+### Triple Authentication
 
 Every encrypted message carries three independent authentication tags: a Poly1305 MAC (128-bit) from Layer 1, a GCM tag (128-bit) from Layer 2, and an HMAC-SHA3-256 tag (256-bit) from Layer 3. All three must verify for decryption to succeed, and the library deliberately does not reveal which tag failed, preventing attackers from targeting individual layers. This provides 128+128+256 = 512 bits of total authentication strength.
 
-### 🔑 Per-Message Forward Secrecy
+### Per-Message Forward Secrecy
 
 Each encryption operation generates a fresh KEM encapsulation, producing unique symmetric keys for every message. This means that even if an attacker compromises the private key after a message was sent, they cannot retroactively decrypt previously captured messages because each message's keys were ephemeral and derived from a different KEM shared secret. This per-message forward secrecy is stronger than the session-level forward secrecy provided by protocols like TLS.
 
-### 📏 Length-Hiding Padding
+### Length-Hiding Padding
 
 By default, PHOENIX adds 16 to 256 bytes of random padding to every message before encryption. This hides the true length of the plaintext, preventing traffic analysis attacks that could infer the type or content of messages from their sizes. For example, without padding, an observer could distinguish a short "yes" response from a long "detailed explanation" response based on ciphertext size alone.
 
-### 🧪 Migration SDK
+### Migration SDK
 
 The built-in Migration SDK supports one-step migration from PyCryptodome, cryptography/Fernet, PyNaCl, and custom AES-GCM implementations. The Transparent Re-encryption feature ensures that plaintext never appears in your application code during migration — the old decryption and PHOENIX re-encryption happen within the SDK's internal scope. Batch migration is supported for large datasets, with progress callbacks for monitoring.
 
@@ -282,7 +296,7 @@ The built-in Migration SDK supports one-step migration from PyCryptodome, crypto
 | Migration (1 item) | ~3–8 seconds | Decrypt old + encrypt new |
 | Batch Migration (100 items) | ~5–15 minutes | Single keypair, progress callback |
 
-> **Note**: Performance is limited by the pure Python implementation, which prioritizes correctness and auditability over raw speed. For production deployments requiring high throughput, consider installing the `cryptography` library as an optional backend (`pip install q-hybridcrypt[performance]`). The triple-cascade architecture inherently requires approximately 3× the computation of a single-cipher approach, but this overhead buys you triple the security margin against future cryptanalytic breakthroughs.
+> **Note**: Performance is limited by the pure Python implementation, which prioritizes correctness and auditability over raw speed. For production deployments requiring high throughput, consider installing the `cryptography` library as an optional backend (`pip install q-hybridcrypt[performance]`). The triple-cascade architecture inherently requires approximately 3x the computation of a single-cipher approach, but this overhead buys you triple the security margin against future cryptanalytic breakthroughs.
 
 ### Ciphertext Size Overhead
 
@@ -342,13 +356,21 @@ qhybridcrypt/
 
 ## Documentation
 
-| Document | Description |
-|----------|-------------|
-| [Architecture Deep-Dive](docs/ARCHITECTURE.md) | Full protocol specification, message format, parameter choices |
-| [Security Analysis](docs/SECURITY.md) | Threat model, security proofs, attack resistance, known limitations |
-| [API Reference](docs/API_REFERENCE.md) | Complete API documentation with type annotations |
-| [Migration Guide](docs/MIGRATION_GUIDE.md) | Step-by-step migration from PyCryptodome, Fernet, NaCl, custom AES-GCM |
-| [Examples](examples/) | Working code examples for all features |
+| Document | Language | Description |
+|----------|----------|-------------|
+| [Architecture Deep-Dive](docs/ARCHITECTURE.md) | EN | Full protocol specification, message format, parameter choices |
+| [Security Analysis](docs/SECURITY.md) | EN | Threat model, security proofs, attack resistance, known limitations |
+| [API Reference](docs/API_REFERENCE.md) | EN | Complete API documentation with type annotations |
+| [Migration Guide](docs/MIGRATION_GUIDE.md) | EN | Step-by-step migration from PyCryptodome, Fernet, NaCl, custom AES-GCM |
+| [مستندات فارسی](docs/README_FA.md) | FA | مستندات کامل به زبان فارسی |
+| [معماری فارسی](docs/ARCHITECTURE_FA.md) | FA | معماری و پروتکل PHOENIX به فارسی |
+| [راهنمای مهاجرت فارسی](docs/MIGRATION_FA.md) | FA | راهنمای مهاجرت به فارسی |
+| [تحلیل امنیتی فارسی](docs/SECURITY_FA.md) | FA | تحلیل امنیتی به فارسی |
+| [中文文档](docs/README_ZH.md) | ZH | 中文完整文档 |
+| [架构说明](docs/ARCHITECTURE_ZH.md) | ZH | PHOENIX协议架构详解 |
+| [迁移指南](docs/MIGRATION_ZH.md) | ZH | 从其他加密库迁移的完整指南 |
+| [安全分析](docs/SECURITY_ZH.md) | ZH | 安全性分析与威胁模型 |
+| [Examples](examples/) | — | Working code examples for all features |
 
 ---
 
@@ -380,9 +402,11 @@ python -m pytest tests/
 
 # Or run manually
 python tests/test_core.py
+python tests/test_migration.py
 
 # Run the demo
 python examples/basic_usage.py
+python examples/migration_example.py
 
 # Code formatting
 black qhybridcrypt/
@@ -398,9 +422,9 @@ MIT License — see [LICENSE](LICENSE) for details.
 
 <div align="center">
 
-**Built for a post-quantum future.** 🐦‍🔥
+**Built for a post-quantum future.**
 
-If this project is useful to you, please consider giving it a ⭐ star!
+If this project is useful to you, please consider giving it a star!
 
 [Report Bugs](https://github.com/mcodersir/Q-HybridCrypt/issues) · [Request Features](https://github.com/mcodersir/Q-HybridCrypt/issues) · [Contribute](https://github.com/mcodersir/Q-HybridCrypt/pulls)
 

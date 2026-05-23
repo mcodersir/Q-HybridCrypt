@@ -243,8 +243,11 @@ class LatticeKEM:
         """Generate quantum-resistant keypair."""
         if seed is not None:
             sk_seed = sha3_256(seed)[:self._seed]
+            # Derive z deterministically from seed for reproducible keypairs
+            z = shake256(sk_seed + b'QHC2_z_derive', self._seed)
         else:
             sk_seed = secure_random_bytes(self._seed)
+            z = secure_random_bytes(self._seed)
 
         # Public key: one-way function of secret key
         pk_seed = shake256(sk_seed + b'QHC2_pk_derive', self._seed)
@@ -260,7 +263,7 @@ class LatticeKEM:
             pk_bytes += poly_to_bytes(poly, 12)
 
         # Secret key: sk_seed || pk || H(pk) || z
-        sk_bytes = sk_seed + pk_bytes + sha3_256(pk_bytes) + secure_random_bytes(self._seed)
+        sk_bytes = sk_seed + pk_bytes + sha3_256(pk_bytes) + z
 
         return pk_bytes, sk_bytes
 

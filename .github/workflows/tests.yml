@@ -1,0 +1,39 @@
+name: Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Run core tests
+        run: python tests/test_core.py
+
+      - name: Run migration tests
+        run: python tests/test_migration.py
+
+      - name: Verify import
+        run: |
+          python -c "from qhybridcrypt import QHybridCrypt; c = QHybridCrypt(); print('Import OK')"
+          python -c "from qhybridcrypt.migration import migrate_from; print('Migration SDK OK')"

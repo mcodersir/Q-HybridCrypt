@@ -1,8 +1,15 @@
 <div dir="rtl" align="center">
 
-# 🔐 Q-HybridCrypt v2.0 "PHOENIX"
+# Q-HybridCrypt v2.0 "PHOENIX"
 
 ### کتابخانه رمزنگاری ترکیبی مقاوم در برابر کوانتوم
+
+<!-- Language Switcher / تغییر زبان -->
+<p>
+  <a href="../README.md"><img src="https://img.shields.io/badge/English-✓-blue.svg?style=for-the-badge" alt="English"/></a>
+  <a href="README_FA.md"><img src="https://img.shields.io/badge/فارسی-✓-green.svg?style=for-the-badge" alt="فارسی"/></a>
+  <a href="README_ZH.md"><img src="https://img.shields.io/badge/中文-✓-red.svg?style=for-the-badge" alt="中文"/></a>
+</p>
 
 [![نسخه پایتون](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://python.org)
 [![پروانه](https://img.shields.io/badge/license-MIT-green.svg)](../LICENSE)

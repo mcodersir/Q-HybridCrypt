@@ -17,7 +17,8 @@ import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from qhybridcrypt import QHybridCrypt
-from qhybridcrypt.utils import secure_random_bytes, constant_time_compare
+from qhybridcrypt.entropy import secure_random_bytes
+from qhybridcrypt.utils import constant_time_compare
 
 
 def test_keypair_generation():
