@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "q-hybridcrypt"
+version = "2.0.0"
+description = "Quantum-Resistant Hybrid Cryptographic Library - Triple-Cascade Encryption with Module-LWE KEM & Migration SDK"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.8"
+authors = [
+    {name = "Q-HybridCrypt Development Team", email = "info@q-hybridcrypt.ir"},
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Topic :: Security :: Cryptography",
+    "Topic :: Security",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+    "Typing :: Typed",
+]
+keywords = [
+    "cryptography", "quantum-resistant", "post-quantum", "pqc",
+    "hybrid", "aes", "gcm", "chacha20", "argon2", "lattice",
+    "lwe", "kem", "cascade", "encryption", "security", "migration", "sdk"
+]
+
+[project.urls]
+Homepage = "https://github.com/mcodersir/Q-HybridCrypt"
+Documentation = "https://github.com/mcodersir/Q-HybridCrypt/tree/main/docs"
+Repository = "https://github.com/mcodersir/Q-HybridCrypt"
+Issues = "https://github.com/mcodersir/Q-HybridCrypt/issues"
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0.0", "black>=22.0.0", "mypy>=1.0.0"]
+performance = ["cryptography>=40.0.0", "argon2-cffi>=21.0.0"]
+migration = ["cryptography>=40.0.0"]
+all = ["cryptography>=40.0.0", "argon2-cffi>=21.0.0", "pytest>=7.0.0", "black>=22.0.0"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+
+[tool.black]
+line-length = 88
+target-version = ["py38", "py39", "py310", "py311", "py312"]
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true

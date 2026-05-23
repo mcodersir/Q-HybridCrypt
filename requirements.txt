@@ -1,0 +1,8 @@
+# Q-HybridCrypt v2.0 PHOENIX
+# No mandatory dependencies - completely standalone library
+
+# Optional for performance:
+# pip install q-hybridcrypt[performance]
+
+# For development:
+# pip install q-hybridcrypt[dev]
